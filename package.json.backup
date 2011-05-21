@@ -1,0 +1,8 @@
+{
+  "name": "cubbies",
+  "fullName": "cubbies",
+  "description": "Addon for cubbi.es service",
+  "author": "Vasudev Kamath <kamathvasudev@gmail.com>",
+  "license": "MPL 1.1/GPL 2.0/LGPL 2.1",
+  "version": "0.1"
+}

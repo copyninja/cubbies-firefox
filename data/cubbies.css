@@ -1,0 +1,35 @@
+/* this is a pretty version of what's in cubbies.js.
+   DO NOT MODIFY unless changes are then reflected
+   in cubbies.js! */
+
+img, #cubbies-overlay{
+  -webkit-transition-property: margin, box-shadow, z-index;
+  -webkit-transition-duration: 0.1s;
+}
+.cubbies-selected{
+  z-index: 9999;
+  box-shadow: 3px 3px 8px -1px blue !important;
+  cursor: pointer !important;
+  margin: -3px 3px 3px -3px;
+
+}
+.cubbies-selected:active{
+  box-shadow: 2px 2px 5px -1px darkblue !important;
+  margin: -1px 1px 1px -1px;
+}
+#cubbies-overlay{
+  position: fixed;
+
+  z-index: 9999;
+  bottom: 30px;
+  left: 30px;
+
+  background-color: rgba(255,255,255,0.8);
+  color: #111;
+
+  border-radius: 3px;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.8);
+}
+#cubbies-overlay:hover{
+  box-shadow: 0 2px 3px rgb(0,0,0);
+}
