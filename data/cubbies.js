@@ -8,10 +8,14 @@ var Cubbies = {
   server: 'cubbies.heroku.com',
   protocol: 'https',
   selectedClass: 'cubbies-selected',
+  script: document.createElement('script'),
+  stylesheet: document.createElement('style'),
+  isInitialized: false,
 
   initialize: function(){
     Cubbies.appendCSS();
     Cubbies.wrapImages();
+    Cubbies.isInitialized = true;
 
     $("img").live("click", function(evt){
       if(evt.shiftKey == 1){
@@ -47,10 +51,10 @@ var Cubbies = {
     var currentPage = Cubbies.attributify(document.location, image),
         imageUrl = absolutify(image.attr('src'), currentPage);
 
-    this.script = document.createElement('script');
-    this.script.type = 'text/javascript';
-    this.script.src = Cubbies.protocol + "://" + Cubbies.server + "/add_photo.js?url=" + encodeURIComponent(imageUrl) + "&attribution=" + encodeURIComponent(currentPage) + "&height=" + image.height() + "&width=" + image.width();
-    document.body.appendChild(this.script);
+    // this.script = document.createElement('script');
+    Cubbies.script.type = 'text/javascript';
+    Cubbies.script.src = Cubbies.protocol + "://" + Cubbies.server + "/add_photo.js?url=" + encodeURIComponent(imageUrl) + "&attribution=" + encodeURIComponent(currentPage) + "&height=" + image.height() + "&width=" + image.width();
+    document.body.appendChild(Cubbies.script);
   },
 
   attributify: function(location, image){
@@ -66,14 +70,14 @@ var Cubbies = {
   },
 
   appendCSS: function(){
-    var stylesheet = document.createElement('style');
-    stylesheet.innerHTML = "" +
-      "img, #cubbies-overlay{ -webkit-transition-property: margin, box-shadow, z-index; -webkit-transition-duration: 0.1s; }\n" +
+    // var stylesheet = document.createElement('style');
+    Cubbies.stylesheet.innerHTML = "" +
+      "img, #cubbies-overlay{ -moz-transition-property: margin, box-shadow, z-index; -moz-transition-duration: 0.2s; }\n" +
       ".cubbies-selected{ z-index: 9999; box-shadow: 3px 3px 8px -1px blue !important; cursor: pointer !important; margin: -3px 3px 3px -3px; }\n" +
       ".cubbies-selected:active{ box-shadow: 2px 2px 5px -1px darkblue !important; margin: -1px 1px 1px -1px; }\n" +
       "#cubbies-overlay{ position: fixed; z-index: 9999; bottom: 30px; left: 30px; background-color: rgba(255,255,255,0.8); color: #111; border-radius: 3px; box-shadow: 0 2px 3px rgba(0,0,0,0.8); }\n" +
       "#cubbies-overlay:hover{ box-shadow: 0 2px 3px rgb(0,0,0); }"
-    document.body.appendChild(stylesheet);
+    document.body.appendChild(Cubbies.stylesheet);
   },
 
   debug: function(str){
@@ -84,7 +88,28 @@ var Cubbies = {
 },
 $window = $(window);
 
-if($window.height() > 100 && $window.width() > 300){
-  Cubbies.debug('Cubbi.es');
-  Cubbies.initialize();
-}
+var active = false;
+
+self.on('message',function onMessage(activation){
+    active = activation;
+
+    if(active){
+        if($window.height() > 100 && $window.width() > 300){
+            Cubbies.debug('Cubbi.es');
+
+            if(!Cubbies.isInitialized)
+                Cubbies.initialize();
+        }        
+    }else{
+        if(Cubbies.isInitialized){
+            try {
+                // User disabled the Addon 
+                document.body.removeChild(Cubbies.stylesheet);
+                document.body.removeChild(Cubbies.script);   
+            }catch(e){
+                // Ignore if its not present in the dom
+            }
+            Cubbies.isInitialized = false;
+        }
+    }
+});
