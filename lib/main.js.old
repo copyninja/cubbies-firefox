@@ -1,0 +1,73 @@
+const contextMenu = require('context-menu');
+const widgets = require('widget');
+const data = require('self').data;
+const pageMod = require('page-mod');
+
+var addonIsEnabled = false;
+
+var workers = [];
+
+
+function activateWorkers() {
+  workers.forEach(
+    function (worker) {
+      worker.postMessage(addonIsEnabled);
+  });
+}
+
+function toggleAddonState(){
+    addonIsEnabled = !addonIsEnabled;
+    activateWorkers()
+    return addonIsEnabled;
+}
+
+function detachWorker(worker, workerArray) {
+  var index = workerArray.indexOf(worker);
+  if(index != -1) {
+    workerArray.splice(index, 1);
+  }
+}
+
+
+exports.main = function(options,callback){
+    console.log(options.loadReason);
+
+    var pagemod = pageMod.PageMod({
+        include: ['*'],
+        contentScriptWhen: 'ready',
+        contentScriptFile: [data.url('cubbies.js')],
+        onAttach: function(worker){
+            worker.postMessage(addonIsEnabled);
+            workers.push(worker);
+
+            worker.port.on('show',function(data){
+                console.log(data);
+            });
+
+            worker.on('detach',function(){
+                detachWorker(this,workers);
+            })
+            
+        }
+    });
+
+    var widget = widgets.Widget({
+        id: 'toggle-switch',
+        label: 'Enable',
+        contentURL: data.url('icon-deactivate.png'),
+        contentScriptWhen: 'ready',
+        contentScriptFile: data.url('widgets.js')
+    });
+
+    widget.port.on('left-click',function(){
+        console.log('enable/disable');
+        widget.contentURL = toggleAddonState()?
+            data.url('icon.png'):
+            data.url('icon-deactivate.png');
+    });
+
+    widget.port.on('right-click',function(){
+        console.log('more preferences shown later');
+    });
+}
+
