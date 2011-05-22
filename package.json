@@ -3,7 +3,8 @@
     "license": "MPL 1.1/GPL 2.0/LGPL 2.1",
     "author": "Vasudev Kamath <kamathvasudev@gmail.com>",
     "version": "0.1",
-    "fullName": "cubbies",
+    "fullName": "Cubbies Image Sharing",
+    "icon": "data/icon.png",
     "id": "jid1-b8qEI0BADxRhBw",
     "description": "Addon for cubbi.es service"
 }
