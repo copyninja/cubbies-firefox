@@ -18,13 +18,24 @@ function attributify(location,image){
     return location.href;
 }
 
+function debug(str){
+    try{
+        console.log(str);
+    }catch(e){
+        
+    }
+}
+
 self.on("click",function(image){
-    var currentPage = attributify(location.href, image);
+    var currentPage = attributify(document.location, image);
     var imageUrl = absolutify(image.src,currentPage);
 
+    debug("Current Page " + currentPage);
+    debug("Image URL " + imageUrl);
+
     this.script = document.createElement('script');
-    this.script.src = "https://cubbies.heroku.com/add_photo.js?url=" + encodeURIComponent(imageUrl) + "&attribution=" + encodeURIComponent(currentPage) + "&height=" + image.height + "&width=" + image.width;
+    this.script.type = "text/javascript";
+    this.script.src =  "https://cubbies.heroku.com/add_photo.js?url=" + encodeURIComponent(imageUrl) + "&attribution=" + encodeURIComponent(currentPage) + "&height=" + image.height + "&width=" + image.width;
 
     document.body.appendChild(this.script);
-    
 });
