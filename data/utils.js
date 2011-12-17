@@ -22,7 +22,7 @@ function debug(str){
     try{
         console.log(str);
     }catch(e){
-        
+
     }
 }
 

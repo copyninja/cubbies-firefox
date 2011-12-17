@@ -47,7 +47,7 @@ exports.main = function(options,callback){
             worker.on('detach',function(){
                 detachWorker(this,workers);
             })
-            
+
         }
     });
 
