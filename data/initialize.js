@@ -31,7 +31,7 @@ var Cubbies = {
         element.removeClass(Cubbies.selectedClass);
       }
     });
-  },      
+  },
 
   appendCSS: function(){
     // var stylesheet = document.createElement('style');
@@ -48,4 +48,4 @@ $window = $(window);
 
 if($window.height() > 100 && $window.width() > 300){
     Cubbies.initialize();
-}        
+}

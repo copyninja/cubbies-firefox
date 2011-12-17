@@ -83,7 +83,7 @@ var Cubbies = {
   debug: function(str){
     try {
       console.log(str);
-    } catch(e) { } 
+    } catch(e) { }
   }
 },
 $window = $(window);
@@ -99,13 +99,13 @@ self.on('message',function onMessage(activation){
 
             if(!Cubbies.isInitialized)
                 Cubbies.initialize();
-        }        
+        }
     }else{
         if(Cubbies.isInitialized){
             try {
-                // User disabled the Addon 
+                // User disabled the Addon
                 document.body.removeChild(Cubbies.stylesheet);
-                document.body.removeChild(Cubbies.script);   
+                document.body.removeChild(Cubbies.script);
             }catch(e){
                 // Ignore if its not present in the dom
             }
